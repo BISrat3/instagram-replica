@@ -1,0 +1,3 @@
+const isLocalhost = Boolean(
+    window
+)
