@@ -6,7 +6,7 @@ import firebase from 'firebase'
 
 export default function Post({postId, user, username, caption, imageUrl}) {
     const [comments, setComments] = useState([])
-    const [comment, setComment] = useState("")
+    const [comment, setComment] = useState('')
 
     useEffect(()=>{
         let unsubscribe;
@@ -32,7 +32,7 @@ export default function Post({postId, user, username, caption, imageUrl}) {
             username: user.displayName,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         })
-        setComment("")
+        setComment('')
     }
   return (
     <div className='post'>
