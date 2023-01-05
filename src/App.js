@@ -165,7 +165,7 @@ function App() {
 
           {user ? (
             <Button onClick ={() => auth.signOut()}>
-              Log OUt
+              Log Out
             </Button>
           ): (
             <div className='app__loginContainer'>
