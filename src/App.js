@@ -34,6 +34,7 @@ function App() {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle)
 
+  // state is short term memory in stack || state is setting variable 
   const [posts, setPosts] = useState([])
   const [open, setOpen] = useState(false)
   const [openSignIn, setOpenSignIn] = useState(false)

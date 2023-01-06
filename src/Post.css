@@ -7,6 +7,7 @@
   
   .post__image {
     width: 100%;
+    /* keep the aspect ratio */
     object-fit: contain;
     border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
@@ -18,6 +19,7 @@
   }
   
   .post__header {
+    /* everything will be displayed in row */
     display: flex;
     align-items: center;
     padding: 20px;

@@ -37,16 +37,23 @@ export default function Post({postId, user, username, caption, imageUrl}) {
   return (
     <div className='post'>
         <div className='post__header'>
+            {/* header post */}
             <Avatar 
                 className='post__avatar'
                 alt={username}
                 src="/static/images/avatar/1.jpg"/>
+                {/* adding jsx into html element */}
                 <h3>{username}</h3>
         </div>
+        {/* image */}
         <img  className='post__image' src={imageUrl} alt='' />
 
+        {/*  user name and caption */}
         <h4 className='post__text'>
-            <strong>{username}</strong>{caption}
+            <strong>
+                {username}
+            </strong>
+            {caption}
         </h4>
         <div className='post__comments'>
             {comments.map((comment) =>(
