@@ -46,15 +46,16 @@ function App() {
   useEffect(()=>{
     const unsubscribe = auth.onAuthStateChanged((authUser) =>{
       if(authUser){
-        // user logged in
+        // user has logged in
         // console.log(authUser)
         setUser(authUser)
       } else{
-        // user logged out
+        // user has logged out
         setUser(null)
       }
     })
     return () =>{
+      // perform some cleanup actions
       unsubscribe ()
     }
   }, [user, username])
@@ -62,6 +63,8 @@ function App() {
   useEffect(() =>{
     db.collection('posts')
       .orderBy('timestamp', 'desc')
+      // every time when there is change it snapchat, 
+      // every time a new post is added this code fire
       .onSnapshot((snapshot) =>{
         setPosts(
           snapshot.docs.map((doc) => ({
@@ -83,6 +86,7 @@ function App() {
         })
       })
       .catch((error) => alert (error.message))
+      setOpen(false)
   }
 
   const signIn =(event) =>{
@@ -91,6 +95,7 @@ function App() {
     auth
       .signInWithEmailAndPassword(email, password)
       .catch((error) => alert(error.message))
+    setOpenSignIn(false)
   }
 
   return (
@@ -99,9 +104,10 @@ function App() {
         <div style={modalStyle} className={classes.paper}>
           <form className='app__signup'>
             <center>
-              <img classname="app__headerImage"
-              src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png' 
-              alt=""
+              <img 
+                classname="app__headerImage"
+                src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png' 
+                alt=""
               />
             </center>
             <Input 
@@ -189,9 +195,11 @@ function App() {
       </div>
 
       <div className='app__upload'>
+        {/* this option checking */}
         {user?.displayName ? (
           <ImageUpload username ={user.displayName}/>
-        ) : (
+          ) : (
+          // or do the following
           <h2 className='app__login__upload'>LOG INTO UPLOAD</h2>
         )}
       </div>

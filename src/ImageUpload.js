@@ -10,19 +10,25 @@ function ImageUpload ({username}){
     const [caption, setCaption] = useState('')
 
     const handleChange = (e) =>{
+        // get the file you selected
         if(e.target.files[0]){
+            // then setimage into that - file you selected
             setImage(e.target.files[0])
         }
     }
 
     const handleUpload = () =>{
+        // image of ref and put image you select
         const uploadTask = storage.ref(`images/${image.name}`).put(image)
 
+        // we need to listen what is happening 
         uploadTask.on(
             "state_changed",
+            // on state change take snapshot
             (snapshot) => {
                 // progress bar
                 const progress = Math.round (
+                    // gives you a progress between 0 to 100
                     (snapshot.bytesTransferred)/snapshot.totalBytes * 100
                 )
                 setProgress(progress)
@@ -38,6 +44,7 @@ function ImageUpload ({username}){
                     .ref('images')
                     .child(image.name)
                     .getDownloadURL()
+                    // get the url then do some stuff
                     .then((url) => {
                         // post image
                         db.collection("posts").add({
@@ -46,12 +53,11 @@ function ImageUpload ({username}){
                             imageUrl: url,
                             username: username,
                         })
-
+                        // once login  no progress, caption
                         setProgress(0)
                         setCaption("")
                         setImage(null)
                     })
-
             }
         )
     }
