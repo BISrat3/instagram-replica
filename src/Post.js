@@ -76,7 +76,8 @@ export default function Post({postId, user, username, caption, imageUrl}) {
                     disabled={!comment}
                     className="post__button"
                     type="submit"
-                    onClick={postComment}>
+                    onClick={postComment}
+                >
                     Post
                 </button>
             </form>
