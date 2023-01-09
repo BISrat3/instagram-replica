@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import Post from './Post'
-import {db, auth} from './firebase'
-import {makeStyles} from '@material-ui/core/styles'
+import { db, auth } from './firebase'
+import { makeStyles } from '@material-ui/core/styles'
 import Modal from '@material-ui/core/Modal'
 import {Button, Input} from '@material-ui/core'
 import ImageUpload from './ImageUpload'
@@ -19,18 +19,18 @@ function getModalStyle (){
   }
 }
 
-const useStyles = makeStyles ((theme) =>({
-    paper:{
+const useStyles = makeStyles((theme) => ({
+    paper: {
       position: "absolute",
       width: 400,
-      backgroundcolor: theme.platte.background.paper,
+      backgroundcolor: theme.palette.background.paper,
       border: "2px solid #000",
       boxShadow: theme.shadows[5],
       // consistent spacing between the elements
       padding: theme.spacing(2, 4, 3),
-      }
-  })
-)
+    },
+  }));
+
 function App() {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle)
@@ -42,7 +42,7 @@ function App() {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState('')
+  const [user, setUser] = useState(null)
 
   useEffect(()=>{
     const unsubscribe = auth.onAuthStateChanged((authUser) =>{
@@ -64,8 +64,8 @@ function App() {
   useEffect(() =>{
     db.collection('posts')
       .orderBy('timestamp', 'desc')
-      // every time when there is change it snapchat, 
-      // every time a new post is added this code fire
+      // everytime when there is change it snapchat, 
+      // everytime a new post is added this code fire
       .onSnapshot((snapshot) =>{
         setPosts(
           snapshot.docs.map((doc) => ({
@@ -175,7 +175,7 @@ function App() {
             <Button onClick ={() => auth.signOut()}>
               Log Out
             </Button>
-          ): (
+          ) : (
             <div className='app__loginContainer'>
               <Button onClick={() => setOpenSignIn(true)}>Log In</Button>
               <Button onClick={() => setOpen(true)}>Sign Up</Button>
@@ -191,7 +191,8 @@ function App() {
             user={user}
             username={post.username}
             caption={post.caption}
-            imageUrl={post.imageUrl}/>
+            imageUrl={post.imageUrl}
+            />
         ))}
       </div>
       <div classname="app__postsRight">
