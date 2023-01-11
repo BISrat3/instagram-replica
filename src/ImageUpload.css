@@ -1,7 +1,6 @@
 .imageupload__container {
     position: fixed;
     bottom: 0;
-    background-color: white;
     width: 500px;
     border-top: 1px solid lightgray;
   }

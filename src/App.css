@@ -10,14 +10,29 @@
 }
 
 .app__posts {
-  padding: 20px;
+  padding: 10px 30px;
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
-.app_postsRight{
+.app__postsRight{
   margin-left: 20px;
 } 
+
+
+.app__headerRight {
+  display: flex;
+  align-items: center;
+}
+
+.app__headerRight > p {
+  margin-right: 5px;
+}
+
+.app__headerAvatar {
+  height: 30px !important;
+  width: 30px !important;
+}
 
 .app__header {
   position: sticky;
@@ -48,4 +63,13 @@
 .app__login__upload {
   padding-bottom: 50px;
   text-align: center;
+}
+
+.app__loginContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid lightgray;
 }

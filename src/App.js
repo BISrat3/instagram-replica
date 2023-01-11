@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
 import Post from './Post'
-import { db, auth } from './firebase'
-import { makeStyles } from '@material-ui/core/styles'
-import Modal from '@material-ui/core/Modal'
-import {Button, Input} from '@material-ui/core'
 import ImageUpload from './ImageUpload'
+import { db, auth } from './firebase'
+import {Avatar, Button, Input, makeStyles, Modal} from '@material-ui/core'
+import FlipMove from "react-flip-move"
 import InstagramEmbed from 'react-instagram-embed';
 
 function getModalStyle (){
@@ -13,6 +12,7 @@ function getModalStyle (){
   const left = 50;
 
   return {
+    height: "300px",
     top:`${top}%`,
     left:`${left}%`, 
     transform:`translate(-${top}%, -${left}%)`,
@@ -50,30 +50,36 @@ function App() {
         // user has logged in
         // console.log(authUser)
         setUser(authUser)
-      } else{
+      if (authUser.displayName){
+        // don't update username
+      } else {
+        return authUser.updateProfile({
+          displayName: username,
+        })
+      }
+      }else{
         // user has logged out
         setUser(null)
       }
     })
-    return () =>{
+    return () => {
       // perform some cleanup actions
       unsubscribe ()
     }
   }, [user, username])
 
-  useEffect(() =>{
+  useEffect(() => {
     db.collection('posts')
       .orderBy('timestamp', 'desc')
       // everytime when there is change it snapchat, 
       // everytime a new post is added this code fire
-      .onSnapshot((snapshot) =>{
+      .onSnapshot((snapshot) => 
         setPosts(
           snapshot.docs.map((doc) => ({
             id: doc.id,
-            post: doc.data(),
-          }))
+            post: doc.data()
+          })))
         )
-      })
   }, [])
 
   const signUp = (event) => {
@@ -81,11 +87,11 @@ function App() {
 
     auth
       .createUserWithEmailAndPassword(email, password)
-      .then((authUser) =>{
-        return authUser.user.updateProfile({
-          displayName: username,
-        })
-      })
+      // .then((authUser) =>{
+      //   return authUser.user.updateProfile({
+      //     displayName: username,
+      //   })
+      // })
       .catch((error) => alert (error.message))
       setOpen(false)
   }
@@ -103,7 +109,7 @@ function App() {
     <div className='app'>
       <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
-          <form className='app__signup'>
+          <form className='app__login'>
             <center>
               <img 
                 classname="app__headerImage"
@@ -139,9 +145,11 @@ function App() {
       </Modal>
       <Modal open={openSignIn} onClose={() => setOpenSignIn(false)}>
         <div style={modalStyle} className={classes.paper}>
-          <form className='app__signup'>
+          <form className='app__login'>
             <center>
-              <img className='app_headerImage' src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png' alt=''/>
+              <img 
+                className='app_headerImage' 
+                src='https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png' alt=''/>
             </center>
 
             <Input 
@@ -171,29 +179,38 @@ function App() {
           alt='' 
           />
 
-          {user ? (
-            <Button onClick ={() => auth.signOut()}>
-              Log Out
-            </Button>
+          {user?.displayName ? (
+            <div className='app__headerRight'>
+              <Button onClick ={() => auth.signOut()}>
+                Log Out
+              </Button>
+              <Avatar 
+                className='app__headerAvatar'
+                alt={user.displayName}
+                src="/static/images/avatar/1.jpg">
+              </Avatar>
+            </div>
           ) : (
-            <div className='app__loginContainer'>
+            <form className='app__loginContainer'>
               <Button onClick={() => setOpenSignIn(true)}>Log In</Button>
               <Button onClick={() => setOpen(true)}>Sign Up</Button>
-            </div>
+            </form>
           )}
       </div>
     <div className='app__posts'> 
       <div className='app__postsLeft'>
-        {posts.map(({id, post}) => (
-          <Post 
-            key={id}
-            postId={id}
-            user={user}
-            username={post.username}
-            caption={post.caption}
-            imageUrl={post.imageUrl}
-            />
-        ))}
+        <FlipMove>
+          {posts.map(({id, post}) => (
+            <Post 
+              key={id}
+              postId={id}
+              user={user}
+              username={post.username}
+              caption={post.caption}
+              imageUrl={post.imageUrl}
+              />
+          ))}
+        </FlipMove>
       </div>
       <div classname="app__postsRight">
         <InstagramEmbed 
@@ -210,15 +227,15 @@ function App() {
       </div>
     </div>      
 
-      <div className='app__upload'>
         {/* this option checking */}
         {user?.displayName ? (
+      <div className='app__upload'>
           <ImageUpload username ={user.displayName}/>
+      </div>
           ) : (
           // or do the following
           <h2 className='app__login__upload'>LOG INTO UPLOAD</h2>
         )}
-      </div>
     </div>
   );
 }
